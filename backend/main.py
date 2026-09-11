@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from db.database import supabase
+from api.chat import router as chat_router
 
 app = FastAPI(
     title="Buddy Guard API",
@@ -7,6 +8,7 @@ app = FastAPI(
     version="1.0.0"
 )
 
+app.include_router(chat_router, prefix="/api")
 
 @app.get("/")
 def root():
