@@ -1,0 +1,349 @@
+@import "tailwindcss";
+
+/* ============================================
+   BUDDY GUARD — "Ink Soup" Design System
+   Based on Design.md by Team Runtime Terror
+   ============================================ */
+
+:root {
+  /* Ink Soup Palette — dark to light */
+  --ink-900: #20272C;
+  --ink-800: #313A43;
+  --ink-700: #414E59;
+  --ink-600: #74818C;
+  --ink-500: #97A0A9;
+  --ink-400: #B9C0C5;
+  --ink-300: #D1D5DA;
+  --ink-200: #E8EAED;
+  --ink-100: #F4F5F6;
+
+  /* Status Colors (fixed, not user-customizable) */
+  --status-critical: #B3453D;
+  --status-critical-light: #D4665E;
+  --status-distress: #C08A3E;
+  --status-distress-light: #D9A85C;
+  --status-safe: #5C8C6E;
+  --status-safe-light: #7AAF8C;
+  --status-info: #74818C;
+
+  /* Accent (user-selectable, default blue) */
+  --accent: #5B8DEF;
+  --accent-light: #7DA6F5;
+  --accent-dark: #4070D0;
+
+  /* Surfaces */
+  --bg-primary: #20272C;
+  --bg-secondary: #313A43;
+  --bg-card: #414E59;
+  --bg-elevated: #4A5764;
+
+  /* Text */
+  --text-primary: #E8EAED;
+  --text-secondary: #97A0A9;
+  --text-muted: #74818C;
+  --text-inverse: #20272C;
+
+  /* Borders */
+  --border-default: #414E59;
+  --border-light: #4A5764;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+  --shadow-glow: 0 0 20px rgba(91, 141, 239, 0.15);
+
+  /* Spacing */
+  --nav-width: 260px;
+  --nav-width-collapsed: 72px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* ============================================
+   Global Styles
+   ============================================ */
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-700) transparent;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes typing {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-4px); }
+}
+
+.animate-fade-in { animation: fadeIn 0.4s ease forwards; }
+.animate-slide-left { animation: slideInLeft 0.4s ease forwards; }
+.animate-slide-right { animation: slideInRight 0.4s ease forwards; }
+.animate-slide-up { animation: slideInUp 0.5s ease forwards; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+
+/* Staggered animations */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+
+/* ============================================
+   Glass / Card Styles
+   ============================================ */
+
+.glass {
+  background: rgba(65, 78, 89, 0.5);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(116, 129, 140, 0.2);
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-default);
+  transition: all var(--transition-normal);
+}
+
+.card:hover {
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.card-flat {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-default);
+}
+
+/* ============================================
+   Button Styles
+   ============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 15px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--accent);
+  color: white;
+}
+.btn-primary:hover { background: var(--accent-dark); box-shadow: var(--shadow-glow); }
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+}
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+.btn-danger {
+  background: var(--status-critical);
+  color: white;
+}
+.btn-danger:hover { background: var(--status-critical-light); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+}
+.btn-ghost:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+
+/* ============================================
+   Status Indicators
+   ============================================ */
+
+.status-critical { color: var(--status-critical); }
+.status-distress { color: var(--status-distress); }
+.status-safe { color: var(--status-safe); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.badge-critical {
+  background: rgba(179, 69, 61, 0.15);
+  color: var(--status-critical-light);
+  border: 1px solid rgba(179, 69, 61, 0.3);
+}
+
+.badge-distress {
+  background: rgba(192, 138, 62, 0.15);
+  color: var(--status-distress-light);
+  border: 1px solid rgba(192, 138, 62, 0.3);
+}
+
+.badge-safe {
+  background: rgba(92, 140, 110, 0.15);
+  color: var(--status-safe-light);
+  border: 1px solid rgba(92, 140, 110, 0.3);
+}
+
+.badge-info {
+  background: rgba(91, 141, 239, 0.15);
+  color: var(--accent-light);
+  border: 1px solid rgba(91, 141, 239, 0.3);
+}
+
+/* ============================================
+   Input Styles
+   ============================================ */
+
+.input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 15px;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(91, 141, 239, 0.15);
+}
+
+.input::placeholder {
+  color: var(--text-muted);
+}
+
+textarea.input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ============================================
+   Layout Helpers
+   ============================================ */
+
+.page-container {
+  min-height: 100vh;
+  display: flex;
+}
+
+.main-content {
+  flex: 1;
+  margin-left: var(--nav-width);
+  padding: 32px;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 16px;
+    padding-bottom: 80px;
+  }
+}
