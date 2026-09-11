@@ -4,7 +4,7 @@
 
 **Team:** Runtime Terror
 
-Track: **Bal Suraksha** (Child Safety, Protection & Well-being) — Bit N Build Hackathon (48-hour build)
+
 
 ---
 
