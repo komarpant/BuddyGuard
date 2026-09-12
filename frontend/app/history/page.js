@@ -1,60 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StatusBadge from "@/components/StatusBadge";
-
-const mockHistory = [
-  {
-    id: 1,
-    type: "conversation",
-    title: "Chat about school stress",
-    date: "Sep 11, 2026",
-    time: "2:30 PM",
-    preview: "Talked about feeling overwhelmed with homework and pressure from classmates...",
-    status: "safe",
-    messages: 12,
-  },
-  {
-    id: 2,
-    type: "report",
-    title: "Cyberbullying screenshot report",
-    date: "Sep 10, 2026",
-    time: "6:15 PM",
-    preview: "Reported mean messages received on social media from an anonymous account...",
-    status: "reviewing",
-    caseId: "BG-2847",
-  },
-  {
-    id: 3,
-    type: "conversation",
-    title: "Feeling anxious lately",
-    date: "Sep 9, 2026",
-    time: "9:00 PM",
-    preview: "Discussed anxiety about upcoming exams and difficulty sleeping...",
-    status: "distress",
-    messages: 24,
-  },
-  {
-    id: 4,
-    type: "sos",
-    title: "SOS Alert — Unsafe situation",
-    date: "Sep 7, 2026",
-    time: "11:30 PM",
-    preview: "Emergency alert triggered. Emergency contacts and officials were notified.",
-    status: "critical",
-    caseId: "BG-2801",
-  },
-  {
-    id: 5,
-    type: "conversation",
-    title: "General check-in with Buddy",
-    date: "Sep 5, 2026",
-    time: "4:00 PM",
-    preview: "Casual conversation about hobbies and weekend plans. No concerns detected.",
-    status: "safe",
-    messages: 8,
-  },
-];
+import { useAuth } from "@/components/AuthProvider";
+import api from "@/lib/api";
 
 const typeIcons = {
   conversation: "💬",
@@ -64,10 +13,27 @@ const typeIcons = {
 
 export default function HistoryPage() {
   const [filter, setFilter] = useState("all");
+  const [history, setHistory] = useState([]);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      fetchHistory();
+    }
+  }, [user]);
+
+  const fetchHistory = async () => {
+    try {
+      const response = await api.get(`/api/history/${user.id}`);
+      setHistory(response.history || []);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const filtered = filter === "all"
-    ? mockHistory
-    : mockHistory.filter((h) => h.type === filter);
+    ? history
+    : history.filter((h) => h.type === filter);
 
   return (
     <div className="history-page">
