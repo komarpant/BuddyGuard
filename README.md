@@ -200,9 +200,3 @@ npm run dev
 
 </div>
 
-
-<div align="center">
-
-*Because every child deserves to be heard before things escalate.*
-
-</div>
