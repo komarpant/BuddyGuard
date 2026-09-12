@@ -2,10 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@/components/AuthProvider";
+import api from "@/lib/api";
 
 export default function SOSPage() {
+  const { user } = useAuth();
   const [stage, setStage] = useState("ready"); // ready | confirm | triggered
   const [countdown, setCountdown] = useState(5);
+
+  const triggerSOS = async () => {
+    if (!user) return;
+    try {
+      await api.post("/api/sos", { user_id: user.id });
+    } catch (err) {
+      console.error("SOS API error:", err);
+    }
+  };
 
   const startSOS = () => {
     setStage("confirm");
@@ -16,6 +28,7 @@ export default function SOSPage() {
       if (count <= 0) {
         clearInterval(timer);
         setStage("triggered");
+        triggerSOS();
       }
     }, 1000);
 
