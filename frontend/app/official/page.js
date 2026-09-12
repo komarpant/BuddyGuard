@@ -1,5 +1,6 @@
 "use client";
 
+import IndiaHeatmap from "@/components/IndiaHeatmap";
 import { useState } from "react";
 import CaseCard from "@/components/CaseCard";
 
@@ -10,14 +11,6 @@ const allCases = [
   { id: "BG-2798", title: "Emotional distress — family issues", status: "Resolved", tier: "safe", date: "Sep 6, 2026", description: "Child expressed sadness about family conflict. Connected with counselor." },
   { id: "BG-2780", title: "Cyberbullying — group chat exclusion", status: "Resolved", tier: "safe", date: "Sep 4, 2026", description: "Child was being excluded and mocked in class group chats." },
   { id: "BG-2756", title: "Anxiety — exam stress", status: "Resolved", tier: "safe", date: "Sep 3, 2026", description: "Ongoing anxiety about academic performance. Therapist recommended." },
-];
-
-const heatmapData = [
-  { area: "Sector 17, Chandigarh", count: 12, tier: "critical" },
-  { area: "Panchkula, Haryana", count: 8, tier: "distress" },
-  { area: "Mohali, Punjab", count: 6, tier: "distress" },
-  { area: "Zirakpur", count: 4, tier: "safe" },
-  { area: "Kharar", count: 3, tier: "safe" },
 ];
 
 export default function OfficialPage() {
@@ -64,42 +57,9 @@ export default function OfficialPage() {
         </div>
 
         <div className="dashboard-grid">
-          {/* Heatmap Placeholder */}
-          <section className="heatmap-section card-flat">
-            <h2 className="section-title" style={{ fontSize: "16px" }}>🗺️ Incident Heatmap</h2>
-            <p className="section-subtitle" style={{ marginBottom: "16px" }}>Geographic density of reported incidents</p>
 
-            <div className="heatmap-placeholder">
-              <div className="heatmap-map">
-                <span style={{ fontSize: "48px", opacity: 0.3 }}>🗺️</span>
-                <p style={{ color: "var(--text-muted)", fontSize: "13px", marginTop: "8px" }}>
-                  Leaflet map integration coming soon
-                </p>
-              </div>
-            </div>
-
-            <div className="area-list">
-              {heatmapData.map((area) => (
-                <div key={area.area} className="area-row">
-                  <span className="area-name">{area.area}</span>
-                  <div className="area-bar-container">
-                    <div
-                      className="area-bar"
-                      style={{
-                        width: `${(area.count / 12) * 100}%`,
-                        background: area.tier === "critical"
-                          ? "var(--status-critical)"
-                          : area.tier === "distress"
-                          ? "var(--status-distress)"
-                          : "var(--status-safe)",
-                      }}
-                    />
-                  </div>
-                  <span className="area-count">{area.count}</span>
-                </div>
-              ))}
-            </div>
-          </section>
+          {/* Active India Heatmap Component */}
+          <IndiaHeatmap userRole="official" />
 
           {/* Case Pipeline */}
           <section className="pipeline-section">
@@ -176,62 +136,6 @@ export default function OfficialPage() {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 20px;
-        }
-
-        .heatmap-section { padding: 20px; }
-
-        .heatmap-placeholder {
-          margin-bottom: 20px;
-        }
-
-        .heatmap-map {
-          height: 180px;
-          background: var(--bg-secondary);
-          border-radius: var(--radius-md);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          border: 1px dashed var(--border-default);
-        }
-
-        .area-list { display: flex; flex-direction: column; gap: 10px; }
-
-        .area-row {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          font-size: 13px;
-        }
-
-        .area-name {
-          width: 140px;
-          color: var(--text-secondary);
-          flex-shrink: 0;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .area-bar-container {
-          flex: 1;
-          height: 8px;
-          background: var(--bg-secondary);
-          border-radius: var(--radius-full);
-          overflow: hidden;
-        }
-
-        .area-bar {
-          height: 100%;
-          border-radius: var(--radius-full);
-          transition: width 0.6s ease;
-        }
-
-        .area-count {
-          width: 24px;
-          text-align: right;
-          font-weight: 600;
-          color: var(--text-primary);
         }
 
         .filter-row {
