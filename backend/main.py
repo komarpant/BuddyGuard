@@ -225,14 +225,29 @@ def submit_report(request: ReportRequest):
 
 @app.post("/api/sos")
 def trigger_sos(request: SOSRequest):
+    case_id = f"BG-{random.randint(9000, 9999)}"
     cases_db.append({
-        "id": f"BG-{random.randint(9000, 9999)}",
+        "id": case_id,
         "title": "SOS ALARM TRIGGERED",
         "status": "Critical Review",
         "tier": "critical",
         "description": "User initiated immediate SOS. Location shared."
     })
-    return {"status": "success", "message": "Officials notified."}
+    
+    new_hist = {
+        "id": int(time.time()*1000),
+        "user_id": request.user_id,
+        "type": "sos",
+        "title": "SOS Alarm Triggered",
+        "date": time.strftime("%b %d, %Y"),
+        "time": time.strftime("%I:%M %p"),
+        "preview": "Immediate SOS triggered. Location shared.",
+        "status": "critical",
+        "caseId": case_id
+    }
+    history_db.append(new_hist)
+
+    return {"status": "success", "message": "Officials notified.", "case_id": case_id}
 
 @app.get("/api/cases")
 def get_cases():
