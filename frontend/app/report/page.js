@@ -1,12 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import api from "@/lib/api";
+import { useAuth } from "@/components/AuthProvider";
 
 export default function ReportPage() {
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState([]);
   const [submitted, setSubmitted] = useState(false);
   const [category, setCategory] = useState("");
+  const [caseId, setCaseId] = useState("");
+  const { user } = useAuth();
 
   const categories = [
     { value: "cyberbullying", label: "Cyberbullying", icon: "💻" },
@@ -25,10 +29,21 @@ export default function ReportPage() {
     setFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Connect to backend API
-    setSubmitted(true);
+    
+    try {
+      const response = await api.post("/api/reports", {
+        user_id: user?.id || "anonymous",
+        category,
+        description
+      });
+      setCaseId(response.case_id);
+      setSubmitted(true);
+    } catch (err) {
+      console.error(err);
+      alert("Error submitting report");
+    }
   };
 
   if (submitted) {
@@ -40,22 +55,22 @@ export default function ReportPage() {
             Report Submitted
           </h2>
           <p style={{ color: "var(--text-secondary)", marginBottom: "8px" }}>
-            Your report has been received and a case has been created.
+            Your report has been received and securely sent to the officials.
           </p>
           <div className="case-created">
             <span style={{ color: "var(--text-muted)", fontSize: "13px" }}>Case ID</span>
             <span style={{ fontSize: "20px", fontWeight: 700, color: "var(--accent-light)" }}>
-              #BG-{Math.floor(1000 + Math.random() * 9000)}
+              {caseId}
             </span>
-            <span className="badge badge-info" style={{ marginTop: "8px" }}>AI Report — Processing</span>
+            <span className="badge badge-info" style={{ marginTop: "8px" }}>Sent to Officials</span>
           </div>
           <p style={{ color: "var(--text-muted)", fontSize: "13px", marginTop: "16px" }}>
-            Our AI will analyze your report and route it to the appropriate team.
+            They will review it and take appropriate action.
           </p>
           <button
             className="btn btn-primary"
             style={{ marginTop: "24px" }}
-            onClick={() => { setSubmitted(false); setDescription(""); setFiles([]); setCategory(""); }}
+            onClick={() => { setSubmitted(false); setDescription(""); setFiles([]); setCategory(""); setCaseId(""); }}
           >
             Submit Another Report
           </button>
