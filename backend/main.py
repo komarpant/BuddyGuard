@@ -120,7 +120,7 @@ def trigger_sos(request: SOSRequest):
         "tier": "critical",
         "description": "User initiated immediate SOS. Location shared."
     })
-    return {"status": "success", "message": "Officials notified."}
+    
 
 @app.get("/api/cases")
 def get_cases():
