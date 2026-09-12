@@ -147,9 +147,6 @@ def database_health():
 
 @app.post("/api/auth/login")
 def login(request: AuthRequest):
-
-@app.post("/api/auth/login")
-def login(request: AuthRequest):
     if USE_SUPABASE:
         try:
             result = sb.table("users").select("*").eq("email", request.email).eq("password", request.password).execute()
