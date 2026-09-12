@@ -112,6 +112,42 @@ class GuardianUpdate(BaseModel):
 
 # === ENDPOINTS ===
 
+@app.get("/")
+def root():
+    return {
+        "message": "Buddy Guard API is running"
+    }
+
+@app.get("/health")
+def health():
+    return {
+        "status": "ok"
+    }
+
+@app.get("/health/db")
+def database_health():
+    if not USE_SUPABASE:
+        return {
+            "status": "ok",
+            "database": "in-memory fallback"
+        }
+
+    try:
+        sb.table("users").select("id").limit(1).execute()
+        return {
+            "status": "ok",
+            "database": "connected"
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "database": "connection failed",
+            "details": str(e)
+        }
+
+@app.post("/api/auth/login")
+def login(request: AuthRequest):
+
 @app.post("/api/auth/login")
 def login(request: AuthRequest):
     if USE_SUPABASE:
