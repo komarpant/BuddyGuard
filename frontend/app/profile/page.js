@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/components/AuthProvider";
 
 const avatars = ["🦊", "🐱", "🐻", "🐼", "🐸", "🦁", "🐨", "🐯", "🦄", "🐙"];
 const accentColors = [
@@ -15,13 +16,28 @@ const accentColors = [
 ];
 
 export default function ProfilePage() {
-  const [alias, setAlias] = useState("Buddy");
-  const [selectedAvatar, setSelectedAvatar] = useState("🦊");
-  const [selectedColor, setSelectedColor] = useState("#5B8DEF");
+  const { profile, updateProfile } = useAuth();
+  
+  const [alias, setAlias] = useState(profile?.alias || "Buddy");
+  const [selectedAvatar, setSelectedAvatar] = useState(profile?.avatar || "🦊");
+  const [selectedColor, setSelectedColor] = useState(profile?.color || "#5B8DEF");
   const [privacyMode, setPrivacyMode] = useState(true);
   const [saved, setSaved] = useState(false);
 
+  useEffect(() => {
+    if (profile) {
+      setAlias(profile.alias || "Buddy");
+      setSelectedAvatar(profile.avatar || "🦊");
+      setSelectedColor(profile.color || "#5B8DEF");
+    }
+  }, [profile]);
+
   const handleSave = () => {
+    updateProfile({
+      alias,
+      avatar: selectedAvatar,
+      color: selectedColor
+    });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
