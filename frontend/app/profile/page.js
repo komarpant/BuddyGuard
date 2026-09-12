@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/AuthProvider";
+import api from "@/lib/api";
 
 const avatars = ["🦊", "🐱", "🐻", "🐼", "🐸", "🦁", "🐨", "🐯", "🦄", "🐙"];
 const accentColors = [
@@ -16,21 +17,56 @@ const accentColors = [
 ];
 
 export default function ProfilePage() {
-  const { profile, updateProfile } = useAuth();
+  const { user, profile, updateProfile } = useAuth();
   
   const [alias, setAlias] = useState(profile?.alias || "Buddy");
   const [selectedAvatar, setSelectedAvatar] = useState(profile?.avatar || "🦊");
   const [selectedColor, setSelectedColor] = useState(profile?.color || "#5B8DEF");
   const [privacyMode, setPrivacyMode] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [guardians, setGuardians] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [form, setForm] = useState({ name: "", relationship: "Parent", whatsapp_number: "", phone_number: "" });
+
+  const fetchGuardians = async () => {
+    if (!user) return;
+    try {
+      const response = await api.get(`/api/guardians/${user.id}`);
+      setGuardians(response.guardians || []);
+    } catch (err) { console.error(err); }
+  };
 
   useEffect(() => {
+    fetchGuardians();
     if (profile) {
       setAlias(profile.alias || "Buddy");
       setSelectedAvatar(profile.avatar || "🦊");
       setSelectedColor(profile.color || "#5B8DEF");
     }
-  }, [profile]);
+  }, [profile, user]);
+
+  const handleAddGuardian = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post("/api/guardians", { user_id: user.id, ...form });
+      setShowAddModal(false);
+      setForm({ name: "", relationship: "Parent", whatsapp_number: "", phone_number: "" });
+      fetchGuardians();
+    } catch (err) { alert("Failed to add"); }
+  };
+
+  const handleDeleteGuardian = async (id) => {
+    if (!confirm("Remove this contact?")) return;
+    try {
+      await api.delete(`/api/guardians/${id}`);
+      fetchGuardians();
+    } catch (err) { alert("Failed to delete"); }
+  };
+
+  const getColor = (rel) => {
+    const c = { Parent: "#5B8DEF", Therapist: "#008170", Official: "#D4A24C", Teacher: "#9B7FE6", Friend: "#4DBAB2" };
+    return c[rel] || "#7B8FA3";
+  };
 
   const handleSave = () => {
     updateProfile({
@@ -142,23 +178,23 @@ export default function ProfilePage() {
           </p>
 
           <div className="contact-list">
-            <div className="contact-item">
-              <div className="contact-avatar" style={{ background: "rgba(91, 141, 239, 0.2)" }}>👨</div>
-              <div className="contact-info">
-                <div className="contact-name">Dad</div>
-                <div className="contact-role">Emergency Contact</div>
-              </div>
-              <span className="badge badge-safe">Active</span>
-            </div>
-            <div className="contact-item">
-              <div className="contact-avatar" style={{ background: "rgba(228, 114, 154, 0.2)" }}>👩</div>
-              <div className="contact-info">
-                <div className="contact-name">Mom</div>
-                <div className="contact-role">Guardian + Emergency</div>
-              </div>
-              <span className="badge badge-safe">Active</span>
-            </div>
-            <button className="btn btn-secondary" style={{ width: "100%", marginTop: "8px" }}>
+            {guardians.length === 0 ? (
+              <p style={{ fontSize: "13px", color: "var(--text-muted)", padding: "12px", textAlign: "center" }}>No emergency contacts added yet.</p>
+            ) : (
+              guardians.map(g => (
+                <div key={g.id} className="contact-item">
+                  <div className="contact-avatar" style={{ background: `${getColor(g.relationship)}22`, color: getColor(g.relationship) }}>
+                    {g.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="contact-info">
+                    <div className="contact-name">{g.name}</div>
+                    <div className="contact-role">{g.relationship}</div>
+                  </div>
+                  <button className="icon-btn delete" onClick={() => handleDeleteGuardian(g.id)} title="Delete Contact">🗑️</button>
+                </div>
+              ))
+            )}
+            <button className="btn btn-secondary" onClick={() => setShowAddModal(true)} style={{ width: "100%", marginTop: "8px" }}>
               + Add Contact
             </button>
           </div>
@@ -196,6 +232,40 @@ export default function ProfilePage() {
           {saved ? "✅ Saved!" : "Save Changes"}
         </button>
       </div>
+
+      {/* ADD MODAL */}
+      {showAddModal && (
+        <div className="modal-overlay">
+          <div className="modal-content glass animate-fade-in">
+            <h2>Add Emergency Contact</h2>
+            <form onSubmit={handleAddGuardian}>
+              <div className="form-group-modal">
+                <label>Name</label>
+                <input required value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder="e.g. Dad" />
+              </div>
+              <div className="form-group-modal">
+                <label>Relationship</label>
+                <select value={form.relationship} onChange={e => setForm({...form, relationship: e.target.value})}>
+                  <option>Parent</option><option>Therapist</option><option>Teacher</option>
+                  <option>Official</option><option>Friend</option><option>Other</option>
+                </select>
+              </div>
+              <div className="form-group-modal">
+                <label>WhatsApp Number</label>
+                <input required value={form.whatsapp_number} onChange={e => setForm({...form, whatsapp_number: e.target.value})} placeholder="+91 98765 43210" />
+              </div>
+              <div className="form-group-modal">
+                <label>Phone Number</label>
+                <input required value={form.phone_number} onChange={e => setForm({...form, phone_number: e.target.value})} placeholder="+91 98765 43210" />
+              </div>
+              <div className="modal-actions">
+                <button type="button" className="cancel-btn" onClick={() => setShowAddModal(false)}>Cancel</button>
+                <button type="submit" className="save-btn">Save Contact</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         .profile-page { max-width: 600px; margin: 0 auto; }
@@ -376,6 +446,10 @@ export default function ProfilePage() {
         .contact-name { font-size: 14px; font-weight: 600; }
         .contact-role { font-size: 12px; color: var(--text-muted); }
 
+        .icon-btn { background: none; border: none; font-size: 16px; cursor: pointer; padding: 6px; border-radius: 8px; transition: 0.2s; }
+        .icon-btn:hover { background: #F1F5F9; }
+        .icon-btn.delete:hover { background: #FEE2E2; color: #EF4444; }
+
         .helpline-list { display: flex; flex-direction: column; gap: 8px; }
 
         .helpline-item {
@@ -393,6 +467,20 @@ export default function ProfilePage() {
         @media (max-width: 768px) {
           .color-grid { grid-template-columns: repeat(2, 1fr); }
         }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+        .modal-content { width: 100%; max-width: 440px; background: white; padding: 32px; border-radius: 24px; box-shadow: 0 24px 48px rgba(0,0,0,0.2); }
+        .modal-content h2 { margin-bottom: 24px; font-size: 22px; color: #1A1A2E; }
+        .form-group-modal { margin-bottom: 16px; text-align: left; }
+        .form-group-modal label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; color: #475569; }
+        .form-group-modal input, .form-group-modal select { width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #E2E8F0; background: #F8FAFC; font-family: inherit; font-size: 15px; color: #1A1A2E; }
+        .form-group-modal input:focus, .form-group-modal select:focus { outline: none; border-color: #5B8DEF; background: white; box-shadow: 0 0 0 3px rgba(91,141,239,0.1); }
+        .modal-actions { display: flex; gap: 12px; margin-top: 32px; }
+        .modal-actions button { flex: 1; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.2s; }
+        .cancel-btn { background: #F1F5F9; color: #475569; border: none; }
+        .cancel-btn:hover { background: #E2E8F0; }
+        .save-btn { background: #1A1A2E; color: white; border: none; }
+        .save-btn:hover { background: #0F172A; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
       `}</style>
     </div>
   );
