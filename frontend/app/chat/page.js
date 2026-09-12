@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import api from "@/lib/api";
 
 const BUDDY_RESPONSES = [
   "Hey! I'm here for you. What's on your mind today? 😊",
@@ -43,17 +44,30 @@ export default function ChatPage() {
     setInput("");
     setIsTyping(true);
 
-    // Simulate AI response (replace with actual API call when backend is ready)
-    setTimeout(() => {
+    api.post("/api/chat", {
+      user_id: "user-123", // mock user ID for now
+      message: userMsg.text,
+      anonymous: true
+    }).then((data) => {
       const response = {
         id: Date.now() + 1,
         sender: "buddy",
-        text: BUDDY_RESPONSES[Math.floor(Math.random() * BUDDY_RESPONSES.length)],
+        text: data.reply,
         time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
       setMessages((prev) => [...prev, response]);
+    }).catch((err) => {
+      console.error(err);
+      const errorResponse = {
+        id: Date.now() + 1,
+        sender: "buddy",
+        text: "Sorry, I'm having trouble connecting to my server right now. 😔",
+        time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      };
+      setMessages((prev) => [...prev, errorResponse]);
+    }).finally(() => {
       setIsTyping(false);
-    }, 1200 + Math.random() * 800);
+    });
   };
 
   const handleKeyDown = (e) => {

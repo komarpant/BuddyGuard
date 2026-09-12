@@ -1,41 +1,41 @@
 @import "tailwindcss";
 
 :root {
-  /* Frontend 2 Light Palette */
-  --bg-primary: #FAF7F2;
-  --bg-secondary: #F1F5F9; /* slate-100 */
+  /* Light Mode Palette */
+  --bg-primary: #F8F9FB;
+  --bg-secondary: #FFFFFF;
   --bg-card: #FFFFFF;
   --bg-elevated: #FFFFFF;
 
   /* Status Colors */
-  --status-critical: #EF4444; /* red-500 */
-  --status-critical-light: #FCA5A5; /* red-300 */
-  --status-distress: #F59E0B; /* amber-500 */
-  --status-distress-light: #FCD34D; /* amber-300 */
-  --status-safe: #22C55E; /* green-500 */
-  --status-safe-light: #86EFAC; /* green-300 */
-  --status-info: #3B82F6; /* blue-500 */
+  --status-critical: #EF4444;
+  --status-critical-light: #FCA5A5;
+  --status-distress: #F59E0B;
+  --status-distress-light: #FCD34D;
+  --status-safe: #22C55E;
+  --status-safe-light: #86EFAC;
+  --status-info: #3B82F6;
 
   /* Accent */
-  --accent: #3B82F6; /* blue-500 */
-  --accent-light: #DBEAFE; /* blue-100 */
-  --accent-dark: #2563EB; /* blue-600 */
+  --accent: #008170;
+  --accent-light: #E6F5F2;
+  --accent-dark: #005b41;
 
   /* Text */
-  --text-primary: #1E293B; /* slate-800 */
-  --text-secondary: #475569; /* slate-600 */
-  --text-muted: #64748B; /* slate-500 */
+  --text-primary: #1A1A2E;
+  --text-secondary: #555770;
+  --text-muted: #8E90A6;
   --text-inverse: #FFFFFF;
 
   /* Borders */
-  --border-default: #EFEAE2;
-  --border-light: #E2E8F0; /* slate-200 */
+  --border-default: #E4E4E7;
+  --border-light: #F0F0F2;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-glow: 0 0 15px rgba(59, 130, 246, 0.4);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.08);
+  --shadow-lg: 0 12px 24px -4px rgb(0 0 0 / 0.1);
+  --shadow-glow: 0 0 15px rgba(0, 129, 112, 0.25);
 
   /* Spacing */
   --nav-width: 260px;
@@ -49,7 +49,7 @@
   /* Border Radius */
   --radius-sm: 6px;
   --radius-md: 10px;
-  --radius-lg: 24px; /* match frontend 2 3xl */
+  --radius-lg: 24px;
   --radius-xl: 32px;
   --radius-full: 9999px;
 }
@@ -179,7 +179,7 @@ body {
   color: var(--text-secondary);
   padding: 8px 12px;
 }
-.btn-ghost:hover { color: var(--text-primary); background: rgba(0,0,0,0.05); }
+.btn-ghost:hover { color: var(--text-primary); background: rgba(0,0,0,0.04); }
 
 /* ============================================
    Status Indicators
@@ -265,7 +265,7 @@ textarea.input {
 
 .main-content {
   flex: 1;
-  margin-left: var(--nav-width);
+  margin-left: calc(var(--nav-width) + 24px);
   padding: 32px;
   max-width: 100%;
   overflow-x: hidden;
