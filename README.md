@@ -1,4 +1,4 @@
-#  Buddy Guard
+# Buddy Guard
 
 **AI companion for child safety, mental well-being, and cyberbullying protection**
 
@@ -8,7 +8,7 @@
 
 ---
 
-## 1. The Problem
+## 1.The Problem
 
 Children and teens in India regularly face bullying (online and offline), digital exploitation, abuse, and mental health distress — but rarely have a safe, low-friction way to talk about it before things escalate. Most existing reporting systems require a child to explicitly name a problem and escalate it themselves, which many kids are too scared, too young, or too unsure to do. By the time an adult finds out, the situation has often already gotten serious.
 
@@ -16,7 +16,7 @@ There's no system today that quietly listens, understands context, and connects 
 
 ---
 
-## 2. Our Solution
+## 2.Our Solution
 
 **Buddy Guard** is an AI chat companion that a child can talk to like a friend. Underneath the conversation, it's doing two things at once:
 
@@ -27,7 +27,7 @@ The core idea: the chatbot *is* the detection layer. A child who'd never fill ou
 
 ---
 
-## 3. Who's Involved
+## 3.Who's Involved
 
 | Role | Who they are | What they get |
 |---|---|---|
@@ -45,15 +45,15 @@ A single person (e.g. a parent) can be both — but the system treats them as tw
 
 ---
 
-## 4. Core Features
+## 4.Core Features
 
-###  AI Chat Companion
+### AI Chat Companion
 - Child-friendly, conversational tone — feels like talking to a friend, not filling out a form
 - Multilingual support
 - Passive contextual analysis of the conversation to detect distress or bullying signals
 - Can also be told directly — child can upload bullying screenshots as manual reports
 
-###  Behavioral Engine (Triage)
+### Behavioral Engine (Triage)
 Every flagged conversation or report gets classified into one of three tiers:
 
 | Tier | Trigger | Action |
@@ -62,41 +62,41 @@ Every flagged conversation or report gets classified into one of three tiers:
 | **Mental Breakdown / Distress / Bullying** | Ongoing emotional distress, cyberbullying | Notifies **Guardian**, surfaces therapist & helpline info |
 | **Spam / Scam / No Risk** | Nothing concerning | Logged only, no notification, no false alarms |
 
-###  SOS
+### SOS
 Separate from the Behavioral Engine — this is a direct, child-initiated panic button for real-time physical danger (being followed, unsafe surroundings, late at night, etc.). Immediately alerts **Emergency Contacts** and can initiate contact with **police/officials**.
 
-###  Report & Case System
+### Report & Case System
 - Every incident (AI-detected or manually reported) gets a **Case ID**
 - Status pipeline: `Report → AI Report → Human Review → Follow-up → Resolved`
 - Full history tracked for accountability
 
-###  Guardian Dashboard
+### Guardian Dashboard
 - Notices tied to their ward, only for relevant tiers (Distress / Critical)
 - Safety recommendations, not raw conversation transcripts
 - (Stretch) Configure Emergency Contact Circle & Safe-Mode sensitivity threshold
 
-### 👮 Official Dashboard
+### 👮Official Dashboard
 - **Heatmap** of incident density (mock/sample geo data for demo)
 - **Case pipeline** view — filterable, sortable by priority/status
 
-###  Privacy Mode
+### Privacy Mode
 - Default identity is alias/avatar-based, not real name
 - Anonymous chats are still analyzed for risk, but not linked to real identity **unless escalated to Critical/Emergency**
 - Child controls what's shared and when
 
-###  Support Resources
+### Support Resources
 - Nearby therapist lookup
 - Helpline numbers
 - Awareness/education section for kids
 
-###  Incident & Conversation History
+### Incident & Conversation History
 - The app keeps a history of the child's conversations and reports
 - Useful to show a doctor, therapist, or counselor later — gives real context instead of the child having to re-explain everything from scratch
 - Accessible to the child (and shareable at their discretion), not silently handed to anyone else
 
 ---
 
-## 5. User Flows
+## 5.User Flows
 
 **Child:**
 `Open Buddy Guard → chat naturally (or report an incident / hit SOS) → AI analyzes in the background → if risk detected, case is created → child is shown safety resources → guardian/officials notified per tier`
@@ -112,7 +112,7 @@ Separate from the Behavioral Engine — this is a direct, child-initiated panic 
 
 ---
 
-## 6. Team — Runtime Terror
+## 6.Team — Runtime Terror
 
 | Name |
 |---|
