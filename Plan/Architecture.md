@@ -9,38 +9,38 @@
 ## 1. High-Level System Overview
 
 ```
-                        ┌────────────────────────────┐
+                        ┌─────────────────────────────┐
                         │        Child Client         │
                         │  (Chat UI, SOS button,      │
                         │  Report form, History,      │
                         │  Profile & Privacy)         │
-                        └──────────────┬───────────────┘
+                        └──────────────┬──────────────┘
                                        │ HTTPS / WebSocket
                                        ▼
-                        ┌────────────────────────────┐
+                        ┌──────────────────────────────┐
                         │        API Gateway /         │
                         │        Backend Service       │
                         └──────────────┬───────────────┘
-                    ┌──────────────────┼───────────────────┐
+                    ┌──────────────────┼────────────────────┐
                     ▼                  ▼                    ▼
-        ┌───────────────────┐ ┌────────────────┐  ┌────────────────────┐
-        │  Detection Layer    │ │ Behavioral      │  │  Report/Case         │
-        │  (Chatbot + NLP)    │ │ Engine (Triage) │  │  Management Service  │
-        └─────────┬──────────┘ └───────┬─────────┘  └──────────┬────────────┘
+        ┌────────────────────┐ ┌─────────────────┐   ┌──────────────────────┐
+        │  Detection Layer   │ │ Behavioral      │   │  Report/Case         │
+        │  (Chatbot + NLP)   │ │ Engine (Triage) │   │  Management Service  │
+        └─────────┬──────────┘ └───────┬─────────┘   └─────────┬────────────┘
                   │                    │                       │
                   ▼                    ▼                       ▼
         ┌────────────────────────────────────────────────────────────────┐
-        │                          Database Layer                         │
-        │  (Conversations, History, Users/Profiles, Cases, Risk Scores,   │
-        │   Guardian Links, Emergency Contacts, Heatmap/Incident Data)    │
+        │                          Database Layer                        │
+        │  (Conversations, History, Users/Profiles, Cases, Risk Scores,  │
+        │   Guardian Links, Emergency Contacts, Heatmap/Incident Data)   │
         └────────────────────────────────────────────────────────────────┘
                   │                    │                       │
                   ▼                    ▼                       ▼
         ┌───────────────┐  ┌────────────────────┐  ┌───────────────────────┐
-        │ Guardian       │  │ Official Dashboard   │  │ Notification           │
-        │ Dashboard      │  │ (Heatmap + Case       │  │ Service (Guardian /     │
-        │                │  │ Pipeline)             │  │ Officials / Emergency   │
-        │                │  │                       │  │ Contacts / SOS)         │
+        │ Guardian      │  │ Official Dashboard │  │ Notification          │
+        │ Dashboard     │  │ (Heatmap + Case    │  │ Service (Guardian /   │
+        │               │  │ Pipeline)          │  │ Officials / Emergency │
+        │               │  │                    │  │ Contacts / SOS)       │
         └───────────────┘  └────────────────────┘  └───────────────────────┘
 ```
 
