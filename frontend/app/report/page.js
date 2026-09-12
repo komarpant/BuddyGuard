@@ -33,16 +33,21 @@ export default function ReportPage() {
     e.preventDefault();
     
     try {
-      const response = await api.post("/api/reports", {
-        user_id: user?.id || "anonymous",
-        category,
-        description
+      const formData = new FormData();
+      formData.append("user_id", user?.id || "anonymous");
+      formData.append("category", category);
+      formData.append("description", description);
+      
+      files.forEach((file) => {
+        formData.append("files", file);
       });
+
+      const response = await api.upload("/api/reports", formData);
       setCaseId(response.case_id);
       setSubmitted(true);
     } catch (err) {
       console.error(err);
-      alert("Error submitting report");
+      alert("Error submitting report. Make sure backend is running and accepts form data.");
     }
   };
 
