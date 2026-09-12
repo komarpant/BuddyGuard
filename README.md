@@ -2,14 +2,13 @@
 
 # 🛡️ Buddy Guard
 
-### AI companion for child safety, mental well-being, and cyberbullying protection
+### AI app for child safety, mental well-being, and cyberbullying protection
 
 **Team Runtime Terror** · Bit N Build Hackathon · Track: **Bal Suraksha** (Child Safety, Protection & Well-being)
 
 [![Track](https://img.shields.io/badge/Track-Bal%20Suraksha-blueviolet)](#)
 [![Hackathon](https://img.shields.io/badge/Bit%20N%20Build-2026-informational)](#)
 [![Status](https://img.shields.io/badge/Status-Prototype-orange)](#)
-[![License](https://img.shields.io/badge/License-MIT-green)](#)
 
 </div>
 
@@ -17,18 +16,18 @@
 
 ## Table of Contents
 
-- [The Problem](#-1-the-problem)
-- [Our Solution](#-2-our-solution)
-- [Who's Involved](#-3-whos-involved)
-- [Core Features](#-4-core-features)
-- [User Flows](#-5-user-flows)
-- [Tech Stack](#-6-tech-stack)
-- [Getting Started](#-7-getting-started)
-- [Team](#-8-team--runtime-terror)
+- The Problem
+- Our Solution
+- Who's Involved
+- Core Features
+- User Flows
+- Tech Stack
+- Getting Started
+- Team
 
 ---
 
-##  1. The Problem
+## 1. The Problem
 
 Children and teens in India regularly face bullying (online and offline), digital exploitation, abuse, and mental health distress — but rarely have a safe, low-friction way to talk about it before things escalate.
 
@@ -38,9 +37,9 @@ Most existing reporting systems require a child to **explicitly name a problem a
 
 ---
 
-##  2. Our Solution
+## 2. Our Solution
 
-**Buddy Guard** is an AI chat companion that a child can talk to like a friend. Underneath the conversation, it's doing two things at once:
+**Buddy Guard** is an AI chat app that a child can talk to like a friend. Underneath the conversation, it's doing two things at once:
 
 | | |
 |---|---|
@@ -51,7 +50,7 @@ Most existing reporting systems require a child to **explicitly name a problem a
 
 ---
 
-##  3. Who's Involved
+## 3. Who's Involved
 
 | Role | Who they are | What they get |
 |------|--------------|----------------|
@@ -71,13 +70,13 @@ Most existing reporting systems require a child to **explicitly name a problem a
 
 ## 4. Core Features
 
-### AI Chat Companion
+### AI Chat App
 - Child-friendly, conversational tone — feels like talking to a friend, not filling out a form
 - Multilingual support
 - Passive contextual analysis of the conversation to detect distress or bullying signals
 - Can also be told directly — child can upload bullying screenshots as manual reports
 
-###  Behavioral Engine (Triage)
+### Behavioral Engine (Triage)
 Every flagged conversation or report gets classified into one of three tiers:
 
 | Tier | Trigger | Action |
@@ -86,7 +85,7 @@ Every flagged conversation or report gets classified into one of three tiers:
 | 🟡 **Mental Breakdown / Distress / Bullying** | Ongoing emotional distress, cyberbullying | Notifies **Guardian**, surfaces therapist & helpline info |
 | ⚪ **Spam / Scam / No Risk** | Nothing concerning | Logged only, no notification, no false alarms |
 
-###  SOS
+### SOS
 Separate from the Behavioral Engine — a direct, child-initiated panic button for real-time physical danger (being followed, unsafe surroundings, late at night, etc.). Immediately alerts **Emergency Contacts** and can initiate contact with **police/officials**.
 
 ### Report & Case System
@@ -194,6 +193,13 @@ npm run dev
 | Bhawesh Papanai |
 
 **Track:** Bal Suraksha (Child Safety, Protection & Well-being) — Bit N Build Hackathon
+
+<div align="center">
+
+*Because every child deserves to be heard before things escalate.*
+
+</div>
+
 
 <div align="center">
 
