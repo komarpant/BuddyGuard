@@ -26,6 +26,25 @@ const api = {
     return res.json();
   },
 
+  async put(endpoint, body) {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json();
+  },
+
+  async delete(endpoint) {
+    const res = await fetch(`${API_BASE}${endpoint}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!res.ok) throw new Error(`API error: ${res.status}`);
+    return res.json();
+  },
+
   async upload(endpoint, formData) {
     const res = await fetch(`${API_BASE}${endpoint}`, {
       method: "POST",
