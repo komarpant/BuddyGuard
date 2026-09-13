@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/AuthProvider";
+import api from "@/lib/api";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -12,22 +13,21 @@ export default function Signup() {
   const [message, setMessage] = useState(null);
   const router = useRouter();
 
+  const { login } = useAuth();
+
   const handleSignup = async (e) => {
     e.preventDefault();
     setError(null);
     setMessage(null);
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    if (error) {
-      setError(error.message);
-    } else {
-      setMessage("Account created! Please check your email for a confirmation link, or log in if email confirmation is disabled.");
-      // Automatically log them in if email confirmation is disabled by default in Supabase (which it often is for local/dev)
-      if (data.session) {
+    try {
+      const response = await api.post("/api/auth/signup", { email, password });
+      if (response.status === "success" && response.user) {
+        setMessage("Account created successfully!");
+        login(response.user);
         router.push("/");
       }
+    } catch (err) {
+      setError(err.message || "Error creating account. User might already exist.");
     }
   };
 

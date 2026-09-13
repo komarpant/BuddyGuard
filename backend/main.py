@@ -157,9 +157,10 @@ def database_health():
 
 @app.post("/api/auth/login")
 def login(request: AuthRequest):
+    email = request.email.strip().lower()
     if USE_SUPABASE:
         try:
-            result = sb.table("users").select("*").eq("email", request.email).eq("password", request.password).execute()
+            result = sb.table("users").select("*").ilike("email", email).eq("password", request.password).execute()
             if not result.data:
                 raise HTTPException(status_code=401, detail="Invalid email or password")
             user = result.data[0]
@@ -169,29 +170,30 @@ def login(request: AuthRequest):
         except Exception as e:
             print(f"Supabase error: {e}")
     # Fallback to in-memory
-    user = next((u for u in users_db if u["email"] == request.email and u["password"] == request.password), None)
+    user = next((u for u in users_db if u["email"].lower() == email and u["password"] == request.password), None)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid email or password")
     return {"status": "success", "user": {"id": user["id"], "email": user["email"], "role": user["role"]}}
 
 @app.post("/api/auth/signup")
 def signup(request: AuthRequest):
+    email = request.email.strip().lower()
     if USE_SUPABASE:
         try:
-            existing = sb.table("users").select("id").eq("email", request.email).execute()
+            existing = sb.table("users").select("id").ilike("email", email).execute()
             if existing.data:
                 raise HTTPException(status_code=400, detail="User already exists")
             new_id = f"local-user-{int(time.time()*1000)}"
-            sb.table("users").insert({"id": new_id, "email": request.email, "password": request.password, "role": "user"}).execute()
-            return {"status": "success", "user": {"id": new_id, "email": request.email, "role": "user"}}
+            sb.table("users").insert({"id": new_id, "email": email, "password": request.password, "role": "user"}).execute()
+            return {"status": "success", "user": {"id": new_id, "email": email, "role": "user"}}
         except HTTPException:
             raise
         except Exception as e:
             print(f"Supabase error: {e}")
     # Fallback
-    if any(u["email"] == request.email for u in users_db):
+    if any(u["email"].lower() == email for u in users_db):
         raise HTTPException(status_code=400, detail="User already exists")
-    new_user = {"id": f"local-user-{int(time.time()*1000)}", "email": request.email, "password": request.password, "role": "user"}
+    new_user = {"id": f"local-user-{int(time.time()*1000)}", "email": email, "password": request.password, "role": "user"}
     users_db.append(new_user)
     return {"status": "success", "user": {"id": new_user["id"], "email": new_user["email"], "role": new_user["role"]}}
 
