@@ -15,31 +15,30 @@ export const AuthProvider = ({ children }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("buddyguard_user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-        fetchProfile(parsedUser.id);
-      } catch (err) {
-        localStorage.removeItem("buddyguard_user");
+    // Check active session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      } else {
+        setProfile(null);
       }
-    }
-    setLoading(false);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        fetchProfile(session.user.id);
+      } else {
+        setProfile(null);
+      }
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
-
-  const login = (userData) => {
-    localStorage.setItem("buddyguard_user", JSON.stringify(userData));
-    setUser(userData);
-    fetchProfile(userData.id);
-  };
-
-  const logout = () => {
-    localStorage.removeItem("buddyguard_user");
-    setUser(null);
-    setProfile(null);
-    router.push("/login");
-  };
 
   const fetchProfile = async (userId) => {
     try {
@@ -79,7 +78,7 @@ export const AuthProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ user, loading, profile, updateProfile, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, profile, updateProfile }}>
       {!loading && children}
     </AuthContext.Provider>
   );

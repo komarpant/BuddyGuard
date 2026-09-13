@@ -1,29 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/components/AuthProvider";
-import api from "@/lib/api";
-import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const { login } = useAuth();
-  const router = useRouter();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const response = await api.post("/api/auth/login", { email, password });
-      if (response.status === "success" && response.user) {
-        login(response.user);
-        router.push("/");
-      }
-    } catch (err) {
-      setError(err.message || "Invalid email or password");
-    }
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) setError(error.message);
   };
 
   return (
