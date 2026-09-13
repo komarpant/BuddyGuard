@@ -1,5 +1,10 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, File, UploadFile, Form
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+import shutil
+from pathlib import Path
+
+Path("uploads").mkdir(exist_ok=True)
 from pydantic import BaseModel
 from typing import Optional, List, Dict
 from google import genai
@@ -45,6 +50,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 # === IN-MEMORY FALLBACK DATABASE ===
 users_db = [
@@ -359,15 +366,30 @@ def save_history(request: HistorySaveRequest):
     return {"status": "success"}
 
 @app.post("/api/reports")
-def submit_report(request: ReportRequest):
+async def submit_report(
+    user_id: str = Form(...),
+    category: str = Form(...),
+    description: str = Form(""),
+    files: List[UploadFile] = File([])
+):
     case_id = f"BG-{random.randint(3000, 9999)}"
     
+    saved_files = []
+    for file in files:
+        if file.filename:
+            file_ext = file.filename.split(".")[-1]
+            new_filename = f"{case_id}_{int(time.time()*1000)}.{file_ext}"
+            file_path = Path("uploads") / new_filename
+            with file_path.open("wb") as buffer:
+                shutil.copyfileobj(file.file, buffer)
+            saved_files.append(f"/uploads/{new_filename}")
+
     case_data = {
         "id": case_id,
-        "title": f"User Report: {request.category.capitalize()}",
+        "title": f"User Report: {category.capitalize()}",
         "status": "AI Report",
         "tier": "distress",
-        "description": request.description
+        "description": f"{description}\nAttachments: {len(saved_files)} file(s)"
     }
     if USE_SUPABASE:
         try:
@@ -378,12 +400,12 @@ def submit_report(request: ReportRequest):
     
     new_hist = {
         "id": int(time.time()*1000),
-        "user_id": request.user_id,
+        "user_id": user_id,
         "type": "report",
-        "title": f"{request.category.capitalize()} Report",
+        "title": f"{category.capitalize()} Report",
         "date": time.strftime("%b %d, %Y"),
         "time": time.strftime("%I:%M %p"),
-        "preview": request.description or "No description provided.",
+        "preview": description or "No description provided.",
         "status": "reviewing",
         "case_id": case_id
     }
@@ -394,7 +416,7 @@ def submit_report(request: ReportRequest):
             print(f"Supabase error: {e}")
     history_db.append(new_hist)
 
-    return {"status": "success", "case_id": case_id}
+    return {"status": "success", "case_id": case_id, "files": saved_files}
 
 @app.post("/api/sos")
 def trigger_sos(request: SOSRequest):

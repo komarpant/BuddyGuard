@@ -4,3 +4,4 @@ python-dotenv
 supabase
 pydantic
 google-genai
+python-multipart
