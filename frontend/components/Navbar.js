@@ -85,14 +85,14 @@ const navItems = [
 export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { profile } = useAuth();
+  const { profile, logout } = useAuth();
   
   const alias = profile?.alias || "Buddy";
   const avatar = profile?.avatar || "B";
   const color = profile?.color || "#008170";
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
+  const handleLogout = () => {
+    logout();
   };
 
   return (
