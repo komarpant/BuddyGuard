@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🛡️ Buddy Guard
+#  Buddy Guard
 
 ### AI app for child safety, mental well-being, and cyberbullying protection
 
